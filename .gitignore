@@ -1,0 +1,4 @@
+# Build fragments
+build/
+node_modules/
+.profile/
