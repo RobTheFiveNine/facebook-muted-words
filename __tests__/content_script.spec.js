@@ -1,13 +1,21 @@
-import run from '../content_script';
+import Scanner from '../content_script';
 
 let bodyDouble;
 let feedDouble;
 let contentAreaDouble;
+let postsDouble;
+
+function run() {
+  const scanner = new Scanner();
+  scanner.muted = ['horde', 'kawhii'];
+  scanner.start();
+}
 
 const createDomMocks = ({ getElementById } = {}) => {
   const originalQuerySelector = document.querySelector;
   const originalMutationObserver = MutationObserver;
   const originalGetElementById = document.getElementById;
+  const originalQuerySelectorAll = document.querySelectorAll;
 
   if (getElementById) {
     document.getElementById = getElementById;
@@ -28,6 +36,8 @@ const createDomMocks = ({ getElementById } = {}) => {
     }
   });
 
+  document.querySelectorAll = jest.fn(() => postsDouble);
+
   window.MutationObserver = jest.fn();
   window.MutationObserver.instance = {
     disconnect: jest.fn(),
@@ -40,6 +50,7 @@ const createDomMocks = ({ getElementById } = {}) => {
     document.querySelector = originalQuerySelector;
     window.MutationObserver = originalMutationObserver;
     document.getElementById = originalGetElementById;
+    document.querySelectorAll = originalQuerySelectorAll;
   };
 };
 
@@ -52,11 +63,24 @@ beforeEach(() => {
 
   feedDouble = {
     innerText: 'news feed double',
+    querySelectorAll: jest.fn(() => postsDouble),
   };
 
   contentAreaDouble = {
     innerText: 'content area double',
   };
+
+  postsDouble = [
+    document.createElement('div'),
+    document.createElement('div'),
+    document.createElement('div'),
+    document.createElement('div'),
+  ];
+
+  postsDouble[0].innerText = 'For the Horde';
+  postsDouble[1].innerText = 'For the Alliance';
+  postsDouble[2].innerText = 'Caruso is the GOAT';
+  postsDouble[3].innerText = 'Kawhii is the GOAT';
 
   resetMocks = createDomMocks({
     getElementById: jest.fn(() => contentAreaDouble),
@@ -144,5 +168,30 @@ describe('if the news feed is not present on launch', () => {
       bodyMutationCallback([], MutationObserver.instance);
       expect(MutationObserver.instance.disconnect).toHaveBeenCalled();
     });
+  });
+});
+
+describe('when a new news feed item is found', () => {
+  it('should add the checked-for-muted-words class to it', () => {
+    run();
+
+    const callback = MutationObserver.mock.calls[0][0];
+    callback();
+
+    for (let i = 0; i < 4; i += 1) {
+      expect(postsDouble[i].classList.contains('checked-for-muted-words')).toBe(true);
+    }
+  });
+
+  it('should hide posts containing a muted word', () => {
+    run();
+
+    const callback = MutationObserver.mock.calls[0][0];
+    callback();
+
+    expect(postsDouble[0].style.display).toEqual('none');
+    expect(postsDouble[1].style.display).toEqual('');
+    expect(postsDouble[2].style.display).toEqual('');
+    expect(postsDouble[3].style.display).toEqual('none');
   });
 });

@@ -1,42 +1,66 @@
 const observerConfig = { attributes: false, childList: true, subtree: false };
 
-function observeNewsFeed() {
-  let target = document.querySelector('[role="feed"]');
-
-  if (!target) {
-    target = document.getElementById('contentArea');
+class Scanner {
+  constructor() {
+    this.muted = [];
   }
 
-  if (!target) {
-    return false;
-  }
+  processNewPosts(target) {
+    const newItems = target.querySelectorAll('[data-pagelet="FeedUnit_{n}"]:not(.checked-for-muted-words), [role="article"]:not(.checked-for-muted-words)');
+    for (let i = 0; i < newItems.length; i += 1) {
+      for (let wi = 0; wi < this.muted.length; wi += 1) {
+        if (newItems[i].innerText.toLowerCase().includes(this.muted[wi])) {
+          newItems[i].style.display = 'none';
+          break;
+        }
+      }
 
-  const observer = new MutationObserver(() => {
-    console.log('feed changed');
-  });
-
-  observer.observe(target, observerConfig);
-
-  return true;
-}
-
-function observeBodyForFeed() {
-  const body = document.querySelector('body');
-  const observer = new MutationObserver(() => {
-    if (observeNewsFeed()) {
-      observer.disconnect();
+      newItems[i].classList.add('checked-for-muted-words');
     }
-  });
+  }
 
-  observer.observe(body, observerConfig);
-}
+  observeNewsFeed() {
+    let target = document.querySelector('[role="feed"]');
 
-export default function run() {
-  if (!observeNewsFeed()) {
-    observeBodyForFeed();
+    if (!target) {
+      target = document.getElementById('contentArea');
+    }
+
+    if (!target) {
+      return false;
+    }
+
+    const observer = new MutationObserver(() => this.processNewPosts(target));
+    observer.observe(target, observerConfig);
+
+    return true;
+  }
+
+  observeBodyForFeed() {
+    const body = document.querySelector('body');
+    const observer = new MutationObserver(() => {
+      if (this.observeNewsFeed()) {
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(body, observerConfig);
+  }
+
+  async loadSettings() {
+
+  }
+
+  start() {
+    if (!this.observeNewsFeed()) {
+      this.observeBodyForFeed();
+    }
   }
 }
 
 if (process.env.NODE_ENV !== 'TEST') {
-  run();
+  const scanner = new Scanner();
+  scanner.loadSettings().then(() => scanner.start());
 }
+
+export default Scanner;
