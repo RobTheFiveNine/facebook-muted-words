@@ -1,3 +1,4 @@
+import FetchMock from 'fetch-mock';
 import Scanner from '../content_script';
 
 let bodyDouble;
@@ -85,10 +86,46 @@ beforeEach(() => {
   resetMocks = createDomMocks({
     getElementById: jest.fn(() => contentAreaDouble),
   });
+
+  FetchMock.mock('*', 'word1\r\nword2\r\nword3\r\nword4');
 });
 
 afterEach(() => {
+  localStorage.clear();
+  FetchMock.reset();
   resetMocks();
+});
+
+it('should load the muted words from local storage', async () => {
+  localStorage.setItem('muted', '["foo", "bar"]');
+
+  const scanner = new Scanner();
+  await scanner.loadSettings();
+
+  expect(scanner.muted).toEqual(['foo', 'bar']);
+});
+
+describe('if a wordlist URL is specified', () => {
+  it('should pull the muted words from the URL', async () => {
+    localStorage.setItem('wordlistUrl', 'http://localhost/mute.txt');
+
+    const scanner = new Scanner();
+    await scanner.loadSettings();
+
+    expect(scanner.muted).toEqual(['word1', 'word2', 'word3', 'word4']);
+  });
+
+  it('should save a copy of the words to local storage', async () => {
+    localStorage.setItem('wordlistUrl', 'http://localhost/mute.txt');
+    expect(localStorage.getItem('muted')).toBeNull();
+
+    const scanner = new Scanner();
+    await scanner.loadSettings();
+
+    expect(localStorage.getItem('muted')).toEqual(
+      JSON.stringify(['word1', 'word2', 'word3', 'word4']),
+    );
+  });
 });
 
 it('should look for the news feed on launch and observe it if found', () => {
