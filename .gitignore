@@ -3,3 +3,6 @@ build/
 node_modules/
 .profile/
 yarn-error.log
+
+# Generated files
+coverage/
