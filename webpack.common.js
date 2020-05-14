@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     content_script: './content_script.js',
     options: './options.jsx',
+    background: './background.js',
   },
   output: {
     filename: '[name].js',
@@ -24,6 +25,10 @@ module.exports = {
       {
         from: 'images',
         to: 'images',
+      },
+      {
+        from: 'background.html',
+        to: 'background.html',
       },
     ]),
     new HtmlWebpackPlugin({

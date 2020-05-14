@@ -3,6 +3,7 @@ const observerConfig = { attributes: false, childList: true, subtree: false };
 class Scanner {
   constructor() {
     this.muted = [];
+    this.newsfeedObserver = null;
 
     this.processNewPosts = this.processNewPosts.bind(this);
     this.observeNewsFeed = this.observeNewsFeed.bind(this);
@@ -13,6 +14,7 @@ class Scanner {
 
   processNewPosts(target) {
     const newItems = target.querySelectorAll('[data-pagelet="FeedUnit_{n}"]:not(.checked-for-muted-words), [role="article"]:not(.checked-for-muted-words)');
+
     for (let i = 0; i < newItems.length; i += 1) {
       for (let wi = 0; wi < this.muted.length; wi += 1) {
         if (newItems[i].innerText.toLowerCase().includes(this.muted[wi])) {
@@ -36,8 +38,14 @@ class Scanner {
       return false;
     }
 
+    if (this.newsfeedObserver) {
+      this.newsfeedObserver.disconnect();
+    }
+
     const observer = new MutationObserver(() => this.processNewPosts(target));
     observer.observe(target, observerConfig);
+
+    this.newsfeedObserver = observer;
 
     return true;
   }
@@ -54,30 +62,45 @@ class Scanner {
   }
 
   async loadSettings() {
-    const wordlistUrl = localStorage.getItem('wordlistUrl');
-    const wordlistString = localStorage.getItem('muted');
+    const self = this;
 
-    if (wordlistString) {
-      this.muted = JSON.parse(wordlistString);
-    }
+    return new Promise((resolve) => {
+      // eslint-disable-next-line no-undef
+      chrome.runtime.sendMessage({ method: 'getLocalStorage', keys: ['wordlistUrl', 'muted'] }, async (response) => {
+        const { wordlistUrl } = response.data;
+        const wordlistString = response.data.muted;
 
-    if (wordlistUrl) {
-      try {
-        const res = await fetch(wordlistUrl);
-        const text = await res.text();
-        const wordlist = text.split('\n');
-
-        for (let i = 0; i < wordlist.length; i += 1) {
-          wordlist[i] = wordlist[i].replace('\r', '');
+        if (wordlistString) {
+          self.muted = JSON.parse(wordlistString);
         }
 
-        this.muted = wordlist;
-        localStorage.setItem('muted', JSON.stringify(this.muted));
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      }
-    }
+        if (wordlistUrl) {
+          try {
+            const res = await fetch(wordlistUrl);
+            const text = await res.text();
+            const wordlist = text.split('\n');
+
+            for (let i = 0; i < wordlist.length; i += 1) {
+              wordlist[i] = wordlist[i].replace('\r', '');
+            }
+
+            self.muted = wordlist;
+
+            // eslint-disable-next-line no-undef
+            chrome.runtime.sendMessage({
+              method: 'setLocalStorage',
+              key: 'muted',
+              value: JSON.stringify(self.muted),
+            });
+          } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
+          }
+        }
+
+        resolve();
+      });
+    });
   }
 
   start() {
@@ -90,6 +113,14 @@ class Scanner {
 if (process.env.NODE_ENV !== 'TEST') {
   const scanner = new Scanner();
   scanner.loadSettings().then(() => scanner.start());
+
+  let previousUrl = window.location.href;
+  setInterval(() => {
+    if (window.location.href !== previousUrl) {
+      previousUrl = window.location.href;
+      setTimeout(() => scanner.start(), 1000);
+    }
+  }, 1000);
 }
 
 export default Scanner;

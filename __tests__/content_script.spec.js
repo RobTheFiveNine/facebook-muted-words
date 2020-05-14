@@ -1,5 +1,6 @@
 import FetchMock from 'fetch-mock';
 import Scanner from '../content_script';
+import { messageHandler } from '../background';
 
 let bodyDouble;
 let feedDouble;
@@ -56,6 +57,16 @@ const createDomMocks = ({ getElementById } = {}) => {
 };
 
 let resetMocks;
+
+beforeAll(() => {
+  global.chrome = {
+    runtime: {
+      sendMessage: (msg, callback) => {
+        messageHandler(msg, null, callback);
+      },
+    },
+  };
+});
 
 beforeEach(() => {
   bodyDouble = {
