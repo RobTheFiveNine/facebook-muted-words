@@ -115,6 +115,8 @@ function OptionsForm() {
       localStorage.removeItem('muted');
       localStorage.setItem('wordlistUrl', wordlistUrl);
     }
+
+    setDirty(false);
   });
 
   React.useEffect(() => {
