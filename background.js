@@ -10,13 +10,20 @@ export function messageHandler(request, sender, sendResponse) {
     sendResponse({ data: response });
   } else if (request.method === 'setLocalStorage') {
     localStorage.setItem(request.key, request.value);
-  } else {
-    sendResponse({});
+    sendResponse();
   }
 }
 
-if (process.env.NODE_ENV !== 'TEST') {
-  chrome.runtime.onMessage.addListener(messageHandler);
+if (typeof chrome === 'undefined') {
+  global.chrome = {
+    runtime: {
+      onMessage: {
+        addListener: () => {},
+      },
+    },
+  };
 }
+
+chrome.runtime.onMessage.addListener(messageHandler);
 
 export default messageHandler;

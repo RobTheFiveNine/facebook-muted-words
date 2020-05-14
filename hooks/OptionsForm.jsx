@@ -33,7 +33,7 @@ SourceOption.defaultProps = {
 
 function MutedWordsInput({ initialValue, onChange, visible }) {
   return (
-    <div className="row" style={{display: visible ? '' : 'none'}}>
+    <div className="row" style={{ display: visible ? '' : 'none' }}>
       <div className="col-md-12">
         <label className="w-100" htmlFor="muted">
           Wordlist (one word per line)
@@ -63,7 +63,7 @@ MutedWordsInput.defaultProps = {
 
 function UrlInput({ initialValue, onChange, visible }) {
   return (
-    <div className="row" style={{display: visible ? '' : 'none'}}>
+    <div className="row" style={{ display: visible ? '' : 'none' }}>
       <div className="col-md-12">
         <label className="w-100" htmlFor="url">
           URL of wordlist
