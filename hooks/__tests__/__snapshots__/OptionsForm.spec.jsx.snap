@@ -1,0 +1,324 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Options /> if the wordlist source is a URL should render correctly 1`] = `
+<div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="source"
+      >
+        Source
+        <select
+          className="form-control"
+          defaultValue="url"
+          id="source"
+          onChange={[Function]}
+        >
+          <option
+            value="local"
+          >
+            Local List
+          </option>
+          <option
+            value="url"
+          >
+            URL
+          </option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="muted"
+      >
+        Wordlist (one word per line)
+        <textarea
+          className="form-control"
+          defaultValue=""
+          id="muted"
+          name="muted"
+          onChange={[Function]}
+          rows="10"
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+    style={
+      Object {
+        "display": "",
+      }
+    }
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="url"
+      >
+        URL of wordlist
+        <input
+          className="form-control"
+          defaultValue="http://localhost/list.txt"
+          id="url"
+          name="url"
+          onChange={[Function]}
+          type="text"
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-12"
+    >
+      <button
+        className="btn btn-primary btn-block"
+        disabled={true}
+        onClick={[Function]}
+        testId="saveButton"
+        type="button"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<Options /> if the wordlist source is a local list should render correctly 1`] = `
+<div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="source"
+      >
+        Source
+        <select
+          className="form-control"
+          defaultValue="local"
+          id="source"
+          onChange={[Function]}
+        >
+          <option
+            value="local"
+          >
+            Local List
+          </option>
+          <option
+            value="url"
+          >
+            URL
+          </option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+    style={
+      Object {
+        "display": "",
+      }
+    }
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="muted"
+      >
+        Wordlist (one word per line)
+        <textarea
+          className="form-control"
+          defaultValue="word1
+word2
+word3"
+          id="muted"
+          name="muted"
+          onChange={[Function]}
+          rows="10"
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="url"
+      >
+        URL of wordlist
+        <input
+          className="form-control"
+          defaultValue="new url"
+          id="url"
+          name="url"
+          onChange={[Function]}
+          type="text"
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-12"
+    >
+      <button
+        className="btn btn-primary btn-block"
+        disabled={true}
+        onClick={[Function]}
+        testId="saveButton"
+        type="button"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<Options /> should render correctly 1`] = `
+<div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="source"
+      >
+        Source
+        <select
+          className="form-control"
+          defaultValue="local"
+          id="source"
+          onChange={[Function]}
+        >
+          <option
+            value="local"
+          >
+            Local List
+          </option>
+          <option
+            value="url"
+          >
+            URL
+          </option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+    style={
+      Object {
+        "display": "",
+      }
+    }
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="muted"
+      >
+        Wordlist (one word per line)
+        <textarea
+          className="form-control"
+          defaultValue=""
+          id="muted"
+          name="muted"
+          onChange={[Function]}
+          rows="10"
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="col-md-12"
+    >
+      <label
+        className="w-100"
+        htmlFor="url"
+      >
+        URL of wordlist
+        <input
+          className="form-control"
+          defaultValue=""
+          id="url"
+          name="url"
+          onChange={[Function]}
+          type="text"
+        />
+      </label>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-12"
+    >
+      <button
+        className="btn btn-primary btn-block"
+        disabled={true}
+        onClick={[Function]}
+        testId="saveButton"
+        type="button"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+`;
