@@ -144,7 +144,7 @@ it('should look for the news feed on launch and observe it if found', () => {
   expect(MutationObserver.instance.observe).toHaveBeenCalledWith(feedDouble, {
     attributes: false,
     childList: true,
-    subtree: false,
+    subtree: true,
   });
 });
 
@@ -155,7 +155,7 @@ describe('if an element with a "feed" role is not found', () => {
     expect(MutationObserver.instance.observe).toHaveBeenCalledWith(contentAreaDouble, {
       attributes: false,
       childList: true,
-      subtree: false,
+      subtree: true,
     });
   });
 });
@@ -175,7 +175,7 @@ describe('if the news feed is not present on launch', () => {
     expect(MutationObserver.instance.observe).toHaveBeenCalledWith(bodyDouble, {
       attributes: false,
       childList: true,
-      subtree: false,
+      subtree: true,
     });
   });
 

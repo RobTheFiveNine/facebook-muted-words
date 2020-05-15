@@ -1,4 +1,4 @@
-const observerConfig = { attributes: false, childList: true, subtree: false };
+const observerConfig = { attributes: false, childList: true, subtree: true };
 
 class Scanner {
   constructor() {
@@ -75,30 +75,32 @@ class Scanner {
         }
 
         if (wordlistUrl) {
-          try {
-            const res = await fetch(wordlistUrl);
-            const text = await res.text();
-            const wordlist = text.split('\n');
+          chrome.runtime.sendMessage({ method: 'fetchWordlist' }, (text) => {
+            try {
+              const wordlist = text.split('\n');
 
-            for (let i = 0; i < wordlist.length; i += 1) {
-              wordlist[i] = wordlist[i].replace('\r', '');
+              for (let i = 0; i < wordlist.length; i += 1) {
+                wordlist[i] = wordlist[i].replace('\r', '');
+              }
+
+              self.muted = wordlist.filter((w) => w !== '');
+
+              // eslint-disable-next-line no-undef
+              chrome.runtime.sendMessage({
+                method: 'setLocalStorage',
+                key: 'muted',
+                value: JSON.stringify(self.muted),
+              });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error(e);
             }
 
-            self.muted = wordlist;
-
-            // eslint-disable-next-line no-undef
-            chrome.runtime.sendMessage({
-              method: 'setLocalStorage',
-              key: 'muted',
-              value: JSON.stringify(self.muted),
-            });
-          } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
-          }
+            resolve();
+          });
+        } else {
+          resolve();
         }
-
-        resolve();
       });
     });
   }

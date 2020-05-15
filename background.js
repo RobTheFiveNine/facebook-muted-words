@@ -10,7 +10,13 @@ export function messageHandler(request, sender, sendResponse) {
     sendResponse({ data: response });
   } else if (request.method === 'setLocalStorage') {
     localStorage.setItem(request.key, request.value);
+  } else if (request.method === 'fetchWordlist') {
+    fetch(localStorage.getItem('wordlistUrl'))
+      .then((r) => r.text())
+      .then(sendResponse);
   }
+
+  return true;
 }
 
 if (typeof chrome === 'undefined') {
