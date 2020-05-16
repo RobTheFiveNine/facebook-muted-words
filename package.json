@@ -44,7 +44,7 @@
     "build:dev": "rm -rf build && webpack --config webpack.dev.js",
     "start:dev": "webpack-dev-server --config webpack.dev.js --content-base build/",
     "test": "jest",
-    "test:ci": "jest --coverage --coverageReporters=text-lcov | coveralls"
+    "test:ci": "jest --coverage --coverageReporters=text-lcov"
   },
   "jest": {
     "setupFiles": [
