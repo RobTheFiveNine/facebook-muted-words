@@ -70,16 +70,16 @@ beforeAll(() => {
 
 beforeEach(() => {
   bodyDouble = {
-    innerText: 'body double',
+    textContent: 'body double',
   };
 
   feedDouble = {
-    innerText: 'news feed double',
+    textContent: 'news feed double',
     querySelectorAll: jest.fn(() => postsDouble),
   };
 
   contentAreaDouble = {
-    innerText: 'content area double',
+    textContent: 'content area double',
   };
 
   postsDouble = [
@@ -89,10 +89,10 @@ beforeEach(() => {
     document.createElement('div'),
   ];
 
-  postsDouble[0].innerText = 'For the Horde';
-  postsDouble[1].innerText = 'For the Alliance';
-  postsDouble[2].innerText = 'Caruso is the GOAT';
-  postsDouble[3].innerText = 'Kawhii is the GOAT';
+  postsDouble[0].textContent = 'For the Horde';
+  postsDouble[1].textContent = 'For the Alliance';
+  postsDouble[2].textContent = 'Caruso is the GOAT';
+  postsDouble[3].textContent = 'Kawhii is the GOAT';
 
   resetMocks = createDomMocks({
     getElementById: jest.fn(() => contentAreaDouble),
@@ -186,7 +186,7 @@ describe('if the news feed is not present on launch', () => {
 
       run();
 
-      feedDouble = { innerText: 'news feed double' };
+      feedDouble = { textContent: 'news feed double' };
 
       const bodyMutationCallback = MutationObserver.mock.calls[0][0];
       bodyMutationCallback([], MutationObserver.instance);
@@ -209,7 +209,7 @@ describe('if the news feed is not present on launch', () => {
 
       run();
 
-      feedDouble = { innerText: 'news feed double' };
+      feedDouble = { textContent: 'news feed double' };
       expect(MutationObserver.instance.disconnect).not.toHaveBeenCalled();
 
       const bodyMutationCallback = MutationObserver.mock.calls[0][0];

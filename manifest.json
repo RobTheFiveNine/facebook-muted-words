@@ -1,6 +1,6 @@
 {
   "name": "facebook-muted-words",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A browser extension that mimics the muted words functionality offered by Twitter whilst browsing the Facebook news feed",
   "manifest_version": 2,
   "content_scripts": [

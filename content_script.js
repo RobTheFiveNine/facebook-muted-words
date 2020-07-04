@@ -17,7 +17,7 @@ class Scanner {
 
     for (let i = 0; i < newItems.length; i += 1) {
       for (let wi = 0; wi < this.muted.length; wi += 1) {
-        if (newItems[i].innerText.toLowerCase().includes(this.muted[wi])) {
+        if (newItems[i].textContent.toLowerCase().includes(this.muted[wi])) {
           newItems[i].style.display = 'none';
           break;
         }
