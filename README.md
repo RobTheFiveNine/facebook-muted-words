@@ -28,6 +28,24 @@ If you'd like to share the configuration across multiple computers, you can crea
 
 The contents of the wordlist will be downloaded the next time Facebook is visited. A copy of the wordlist will be cached by the extension, and used until the next time Facebook is visited.
 
+Preventing Remote Word List Being Cached
+----------------------------------------
+Although dealing with caching is beyond the scope of this extension, it is likely to be a potential issue. This can be overcome by ensuring the web server makes use of the headers that signify how long a browser should cache a file for.
+
+For example, in Apache, if you were hosting the word list in a file named `wordlist.txt`, you could add the following to a `.htaccess` file to ensure the file is not cached by browsers:
+
+```apache
+<Files wordlist.txt>
+  FileETag None
+  Header unset ETag
+  Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+  Header set Pragma "no-cache"
+  Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+</Files>
+```
+
+*Note: this would require that the `headers` module be enabled by running `sudo a2enmod headers` on the server*
+
 Supported Browsers
 ------------------
 Currently, the extension only works on Google Chrome (tested on 81.0.4044.138).
