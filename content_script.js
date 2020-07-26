@@ -83,7 +83,9 @@ class Scanner {
                 wordlist[i] = wordlist[i].replace('\r', '');
               }
 
-              self.muted = wordlist.filter((w) => w !== '');
+              self.muted = wordlist
+                .filter((w) => w !== '')
+                .map((w) => w.toLowerCase());
 
               // eslint-disable-next-line no-undef
               chrome.runtime.sendMessage({
