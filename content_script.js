@@ -35,6 +35,10 @@ class Scanner {
     }
 
     if (!target) {
+      target = document.querySelector('body');
+    }
+
+    if (!target) {
       return false;
     }
 
